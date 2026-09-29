@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <title>Untitled</title>
+  </head>
+  <body>
+    
+    <div id="output"></div>
+      <p id="para">
+        textD
+      </p>
+      <button> red </button>
+      <button> blue</button>
+    
+    
+    <script>
+      function log(message) {
+        console.log(message);
+        document.getElementById("output").innerHTML += "<p>" + message + "</p>";
+      }
+      
+      function changeColor(newColor) {
+        const elem = document.getElementById("para");
+        elem.innerHTML += "<p> hello </p>";
+        elem.style.color = newColor;
+      }
+      
+      document.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", (event) => {
+          changeColor(event.target.textContent.toLowerCase());
+        });
+      });
+      log("Hello World");
+
+    </script>
+    
+    
+    
+<!-- Scripts at bottom of body -->
+  </body>
+</html>
