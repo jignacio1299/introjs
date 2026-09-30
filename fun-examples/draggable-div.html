@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <title>Untitled</title>
+    <style>
+      #mydiv {
+        position: absolute;
+        z-index: 10;
+        background-color: red;
+        color: yellow;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="mydiv">
+      <div id="mydivheader">
+        <p>MOVE</p>
+        <p>THIS</p>
+        <p>DIV!</p>
+      </div>
+    </div>
+    
+  <script>
+    //make draggable
+    dragElement(document.getElementById("mydiv"));
+    function dragElement(element) {
+      let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+      
+      if(document.getElementById(element.id + "header")) {
+        document.getElementById(element.id + "header").onmousedown = dragMouseDown;
+      }
+      else {
+        element.onmousedown = dragMouseDown;
+      }
+      
+      function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();  // Prevents grabbing mouse cursor on startup
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        
+        document.onmouseup = closeDragElement;
+        // Call a function whenever the mouse stops clicking
+        document.onmousemove = elementDrag;
+      }
+      
+      function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // Calculate the new cursor's position
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        // Sets the elements new position
+        element.style.left = (element.offsetLeft - pos1) + "px";
+        element.style.top  = (element.offsetTop - pos2) + "px";
+        
+        //Update to the current cursor's position
+      }
+      
+      // Stop moving when the mouse is released
+      function closeDragElement() {
+        document.onmouseup = null;
+        document.onmousemove = null;
+      }
+    }
+  </script>
+  </body>
+</html>
