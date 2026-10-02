@@ -5,42 +5,141 @@
   </head>
   <body>
     
+    <p id="para"> What color am I? </p>
+    <button> red </button>
+    <button> blue</button>
+    
     <div id="output"></div>
-      <p id="para">
-        textD
-      </p>
-      <button> red </button>
-      <button> blue</button>
     
     
     <script>
       
+      // Variable declaration of hour and greeting
       let hour = 20;
       let greeting = "Good Day!";
       
+      // Compare hour and 18. If hour is grearter than 18 (i.e. 6pm), 
+      // change the greeting to "Good Evening!"
       if (hour > 18) {
         greeting = "Good Evening!";
       }
+      // Otherwise, set it to "Good Day!".
       else {
         greeting = "Good Day!";
       }
+      // Since hour is 20, and 20 > 18, the first code block runs
+      // instead of the other one
+      
+      
+      // This is a function. This block of code will run when we call it.
+      // Functions are called using their name and parentheses (with
+      // any parameters inside of said parentheses).
+      // This function will be called with add(x, y)
+      function add(x, y) {
+        // Functions end when "return" is called. Optionally, we can
+        // also have the function return data (in this case, x + y)
+        
+        return x + y;
+        
+        // The value returned can be stored in a variable like:
+        // let x = add(4, 5)  ==> x has 9 in it
+      }
+      
+      // Logs the message into the "output" div 
       function log(message) {
-        console.log(message);
+        
+        // First use of objects/classes. There's a lot to know about this but
+        // to keep it brief:
+        // - Objects store a bunch of information and have functions and data attached to them. 
+        // - You call a specific objects function with .<function>(...) (e.g. console.log(message))
+        // - You can access attributes of an object with .<attribute> (e.g. output.innerHTML)
+        
+        console.log(message); // This prints the message to the console (open it with ctrl/cmd + shift + J)
+        
+        // document.getElementById("output")            gets the element in the document with the output ID
+        // document.getElementById("output").innerHTML   accesses the contents of that element as a string
+        
+        // A neat thing you can do with strings is combine them together with "addition".
+        // Example: "Hello" + "there" = "Hellothere"
+        // Before the line below runs, output's innerHTML is empty (see on line 8)
         document.getElementById("output").innerHTML += "<p>" + message + "</p>";
+        // But after this line runs, we call += "<p>" + message + "</p>". To break it down:
+        // - x += y is shorthand for x = x + y. We are simply adding what's on the left to
+        //   what's already on the right.
+        // - In doing so, we are adding a new <p> element that has the contents of 
+        //   message every time we call this function
+        
       }
       
+      // Let's call that add function we made earlier
+      log(add(4, 5));
+      
+      // Another function where we change the font color of the "para"
       function changeColor(newColor) {
+        // Find the para object and store it in elem
         const elem = document.getElementById("para");
-        elem.innerHTML += "<p>" + x + "</p>";
-        elem.style.color = newColor;
+        log(greeting); // Log the greeting too I guess?
+        elem.style.color = newColor; // Access para's CSS style and reassign the font color to the new color
       }
       
+      // TL;DR: We assigned every button in the document to call changeColor.
+      // We passed in the text content of the parameter to changeColor so it changes red or blue.
+      // THIS IS THE MOST ADVANCED CONTENT IN THIS CODE
+      //
+      // Line 118:
+      // document.querySelectorAll(...) procures an array/list of all elements in document that are
+      // matching that type. Arrays can have the .forEach() function called on it, which will
+      // automatically call that function on each object in the list. This function requires that
+      // the item in the list is passed through as a parameter (named "button").
+      // We then utilize fancy arrow syntax to define the function in the call to forEach
+      // where we add an event listener to the current button.
+      //
+      // Line 120:
+      // While your code is running, event listeners will check for anything that happens.
+      // In this case, we listen for an event where the user clicks on the button. Once
+      // our program "hears" this event (i.e. the button is clicked on), it will run a function.
+      // Again, we use some fancy arrow syntax to define the function in the call to addEventListener.
+      // Functions called by event listeners will automatically pass in relevant information depending
+      // on the type of event listened to under the object conventionally named "event". 
+      // "click" events specifically will have:
+      // - event.target: the element that was clicked on
+      // - event.preventDefault(): prevents default browser actions (idk what this really means)
+      // - event.defailt: a number representing the number of times clicked within a short time
+      //                (typically for detecting double or triple clicks) 
+      //
+      // Line 122:
+      // We can use event.target to get the button any buttons that were clicked on, and when they
+      // do, the changeColor function will be called on them. Recall that changeColor simply takes
+      // a string representing a color as a parameter. We will get that color from the words in
+      // the button (i.e. "red" or "blue"). To do this, after getting the button with event.target,
+      // we can obtain its text content ("red" or "blue") by using .textContent. Since colors
+      // are case sensitive, we use .tolowerCase() just to make sure it's correctly formatted.
+    
       document.querySelectorAll("button").forEach((button) => {
+        
         button.addEventListener("click", (event) => {
+          
           changeColor(event.target.textContent.toLowerCase());
+          
         });
       });
-      log("Hello World");
+      
+      // This code was written very compactly (only 5 without whitespace) so here it is uncompacted
+      // for readability (uncomment it if you want to see it work)
+      
+/*      
+     function onClickChangeColor(event) {
+        changeColor(event.target.textContent.toLowerCase());
+      }
+      
+      function addClickEventListener(button) {
+        button.addEventListener("click", onClickChangeColor);
+      }
+      
+      document.querySelectorAll("button").forEach(addClickEventListener);
+
+*/      
+      
 
     </script>
     
