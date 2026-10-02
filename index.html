@@ -60,6 +60,7 @@
         // document.getElementById("output").innerHTML   accesses the contents of that element as a string
         
         // A neat thing you can do with strings is combine them together with "addition".
+        // This is called string concatenation
         // Example: "Hello" + "there" = "Hellothere"
         // Before the line below runs, output's innerHTML is empty (see on line 8)
         document.getElementById("output").innerHTML += "<p>" + message + "</p>";
@@ -91,7 +92,7 @@
       // matching that type. Arrays can have the .forEach() function called on it, which will
       // automatically call that function on each object in the list. This function requires that
       // the item in the list is passed through as a parameter (named "button").
-      // We then utilize fancy arrow syntax to define the function in the call to forEach
+      // We then utilize fancy arrow syntax to define the function in the call (lambda function) to forEach
       // where we add an event listener to the current button.
       //
       // Line 120:

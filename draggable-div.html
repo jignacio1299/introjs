@@ -21,43 +21,81 @@
     </div>
     
   <script>
-    //make draggable
+    //Make mydivheader or mydiv draggable
     dragElement(document.getElementById("mydiv"));
     function dragElement(element) {
       let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
       
       // This if statement is shorthand for: 
       // document.getElementById(element.id + "header") != null
-      // We are esentially making sure mydivheader exists before calling functions on it,
+      // We are esentially making sure "mydivheader" exists before calling functions on it,
       // as calling functions on a nonexistent object typically tends to break things
       if(document.getElementById(element.id + "header")) {
+        
+        // Event handlers are back looking a little different syntatically.
+        // onmousedown is a predefined event handler that will run the function dragMouseDown
+        // when it is triggered.
+        // As I understand it, this way of assigning event handlers is archaic.
+        // This line of code is essentially:
+        // document.getElementById(element.id + "header").addEventListener("mousedown", dragMouseDown);
         document.getElementById(element.id + "header").onmousedown = dragMouseDown;
       }
+      // If mydivheader didn't end up existing, assign it to element instead ("mydiv")
       else {
         element.onmousedown = dragMouseDown;
       }
       
+      // Notice that this function is declared inside the dragElement function.
+      // This comes with some implications:
+      // - This function has access to variables/functions declared inside dragElement()
+      //   including element and pos1, pos2, pos3, pos4
+      // - This function cannot be called outside of dragElement()
+      //
+      // This function is attached to the onmousedown event and assigns the behavior that
+      // the mydivheader should follow when it is pressed down on. 
+      // In this case, the mousedown event e passes everything at this link: https://developer.mozilla.org/es/docs/Web/API/Element/mousedown_event
+      // For our purposes however, we will be using
+      // - e.clientX: X coordinate of the cursor
+      // - e.clientY: Y coordinate of the cursor
       function dragMouseDown(e) {
-        e = e || window.event;
-        e.preventDefault();  // Prevents grabbing mouse cursor on startup
+        
+        // Ensures compatability with older web browsers that used event handlers differently
+        e = e || window.event; 
+        e.preventDefault();  // Prevents grabbing mouse cursor on startup? idk
         pos3 = e.clientX;
         pos4 = e.clientY;
         
-        document.onmouseup = closeDragElement;
-        // Call a function whenever the mouse stops clicking
-        document.onmousemove = elementDrag;
+        document.onmousemove = elementDrag;   // This function will run whenever the mouse moves
+        document.onmouseup = closeDragElement; // This function will run once the mouse is let go
       }
       
+      // This function is attached to the onmousemove event
+      // Similarly to onmousedown, we have e.clientX and e.clientY as defined above (line 58)
+      //
+      // The algorithm behind having a div follow your cursor is:
+      // 1) Store where the cursor first clicked on the div (in pos3 and pos4).
+      //    This is first done in dragMouseDown().
+      // 2) Calculate how far the cursor moved (in pos1 and pos2) by
+      //    calculating pos3 - e.clientX and pos4 - e.clientY
+      // 3) Update pos3 and pos4 to store the new coordinates of the cursor's position
+      // 4) Update the position of the div by adding the distance traveled to it
       function elementDrag(e) {
+        // Ensures compatability with older web browsers that used event handlers differentl
         e = e || window.event;
-        e.preventDefault();
-        // Calculate the new cursor's position
+        e.preventDefault(); // Prevents grabbing mouse cursor on startup? idk
+        
+        // Calculate how far the cursor moved
         pos1 = pos3 - e.clientX;
         pos2 = pos4 - e.clientY;
-        // Update pos3 and pos4 to the curr
+        
+        // Update pos3 and pos4 to the current cursor's position
+        // This will be prepared the next time elementDrag is called
         pos3 = e.clientX;
         pos4 = e.clientY;
-        // Sets the elements new position
+        // Sets the elements new position. Remember that this isn't a number, its a
+        // string that's a number with a unit so we have to concatenate "px" to the result.
+        // It should be noted that adding a string to any variable will turn the variable
+        // into a string in that expression.
         element.style.left = (element.offsetLeft - pos1) + "px";
         element.style.top  = (element.offsetTop - pos2) + "px";
         
@@ -66,6 +104,8 @@
       
       // Stop moving when the mouse is released
       function closeDragElement() {
+        // By releasing the event listeners, elementDrag and closeDragElement
+        // will no longer run when onmousemove and onmouseup are heard.
         document.onmouseup = null;
         document.onmousemove = null;
       }
